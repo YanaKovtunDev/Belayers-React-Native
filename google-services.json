@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "449052956025",
+    "project_id": "belayers-20416",
+    "storage_bucket": "belayers-20416.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:449052956025:android:bba5ef7f247efbe0b64ba8",
+        "android_client_info": {
+          "package_name": "com.test.belayersapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCb4W7aOz54LLiArgcnk8jL2MKOkoa69iw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

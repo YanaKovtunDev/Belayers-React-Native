@@ -3,6 +3,7 @@ import { ActivityIndicator, SafeAreaView, StyleSheet, Text } from 'react-native'
 import { SplashScreen } from './screens/Splash';
 import { StatusBar } from 'expo-status-bar';
 import { useFonts } from 'expo-font';
+import crashlytics from '@react-native-firebase/crashlytics'
 
 export default function App() {
   const [isSplashScreenVisible, setSplashScreenVisible] = useState(true);
@@ -14,6 +15,8 @@ export default function App() {
   });
 
   useEffect(() => {
+    crashlytics().log("Start app");
+
     setTimeout(() => {
       setSplashScreenVisible(false);
     }, 3000);
