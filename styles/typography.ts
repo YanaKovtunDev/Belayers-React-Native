@@ -1,12 +1,14 @@
+import { theme } from './theme';
+
 export const text = {
-  color: '#211623',
+  color: theme.colors.text,
   fontFamily: 'Unbounded',
 };
 
 export const logo = {
   ...text,
   fontSize: 32,
-  fontWeight: '700' as '700',
+  fontFamily: 'UnboundedBold',
   letterSpacing: 1.6,
 };
 
@@ -19,8 +21,35 @@ export const header = {
 
 export const small = {
   ...text,
+  fontSize: 11,
+  fontFamily: 'UnboundedLight',
+  lineHeight: 14.3,
+};
+
+export const capsLock = {
+  ...text,
   fontSize: 10,
-  fontWeight: '300' as '300',
+  fontFamily: 'UnboundedLight',
   textTransform: 'uppercase' as 'uppercase',
-  letterSpacing: 0.5,
+};
+
+export const buttonText = {
+  ...text,
+  color: theme.colors.white,
+  fontSize: 14,
+  fontFamily: 'UnboundedBold',
+  textTransform: 'uppercase' as 'uppercase',
+};
+
+export const navigationHeader = {
+  ...text,
+  fontSize: 16,
+  fontFamily: 'UnboundedBold',
+  letterSpacing: 0.8,
+};
+
+export const link = {
+  ...text,
+  color: theme.colors.primary[600],
+  fontFamily: 'UnboundedLight',
 };
