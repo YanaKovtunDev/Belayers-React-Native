@@ -1,3 +1,4 @@
+import 'expo-dev-client';
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator } from 'react-native';
 import { SplashScreen } from './screens/Splash';
@@ -5,18 +6,17 @@ import { useFonts } from 'expo-font';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer } from '@react-navigation/native';
 import { Onboarding } from './screens/authorization/Onboarding';
-import { FIREBASE_AUTH } from './FirebaseConfig';
 import { onAuthStateChanged } from 'firebase/auth';
-import ProfileLayout from './components/ProfileLayout';
 import { Box, NativeBaseProvider } from 'native-base';
 import { theme } from './styles/theme';
 import { TermsAndConditions } from './screens/TermsAndConditions';
 import { Typography } from './styles';
 import { PrivacyPolicy } from './screens/PrivacyPolicy';
 import { RootStackParamList } from './types/navigation';
+import { FIREBASE_AUTH } from './FirebaseConfig';
+import ProfileLayout from './components/ProfileLayout';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
-
 export default function App() {
   const [user, setUser] = useState(null);
   const [isSplashScreenVisible, setSplashScreenVisible] = useState(true);

@@ -120,3 +120,17 @@ export const TriangleBrown = () => {
     </Svg>
   );
 };
+
+export const SignupBackground = () => {
+  return (
+    <>
+      <TriangleGreen />
+      <TriangleOrange />
+      <TriangleYellow />
+      <TriangleBrown />
+      <TriangleBigGray />
+      <TriangleSmallGray />
+      <TriangleGray />
+    </>
+  );
+};

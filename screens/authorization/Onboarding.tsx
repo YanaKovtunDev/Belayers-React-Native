@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Platform, StyleSheet, Text } from 'react-native';
+import { Alert, Platform, StyleSheet, Text } from 'react-native';
 import { SignupWrapper } from '../../components/SignupWrapper';
 import { Buttons, Typography } from '../../styles';
 import { VStack, Button } from 'native-base';
@@ -7,18 +7,38 @@ import { theme } from '../../styles/theme';
 import { RootStackScreenProps } from '../../types/navigation';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { FirstMountain } from '../../assets/svg/SignupMountains';
-import {
-  TriangleBigGray,
-  TriangleBrown,
-  TriangleGray,
-  TriangleGreen,
-  TriangleOrange,
-  TriangleSmallGray,
-  TriangleYellow,
-} from '../../assets/svg/SignupTriangles';
+import { SignupBackground } from '../../assets/svg/SignupTriangles';
+import { signInWithCredential, FacebookAuthProvider } from 'firebase/auth';
+import { FIREBASE_AUTH } from '../../FirebaseConfig';
+import { LoginManager, AccessToken } from 'react-native-fbsdk-next';
+import { saveUserDataToFirestore } from '../../utils/firebase';
 
 export const Onboarding = ({ navigation }: RootStackScreenProps<'Onboarding'>) => {
   const [onPressedFacebook, toggleOnPressedFacebook] = useState(false);
+
+  const signInWithFB = async () => {
+    try {
+      await LoginManager.logInWithPermissions(['public_profile', 'email']);
+      const data = await AccessToken.getCurrentAccessToken();
+      if (!data) {
+        return;
+      }
+      const facebookCredential = FacebookAuthProvider.credential(data.accessToken);
+      const response = await signInWithCredential(FIREBASE_AUTH, facebookCredential);
+
+      const userData = {
+        name: response.user.displayName || '',
+        email: response.user.email || '',
+        profilePicture: response.user.photoURL || '',
+      };
+
+      await saveUserDataToFirestore(userData);
+      Alert.alert('Authorization successful');
+    } catch (e) {
+      const message = (e as Error).message;
+      Alert.alert(message || 'Error with authorization');
+    }
+  };
 
   return (
     <SignupWrapper>
@@ -42,6 +62,7 @@ export const Onboarding = ({ navigation }: RootStackScreenProps<'Onboarding'>) =
           onPressIn={() => toggleOnPressedFacebook(true)}
           onPressOut={() => toggleOnPressedFacebook(false)}
           leftIcon={<FontAwesome5 marginRight={15} name="facebook" size={24} color="white" />}
+          onPress={signInWithFB}
         >
           <Text style={Typography.buttonText}>use facebook</Text>
         </Button>
@@ -57,13 +78,7 @@ export const Onboarding = ({ navigation }: RootStackScreenProps<'Onboarding'>) =
         </Text>
       </VStack>
       <FirstMountain />
-      <TriangleGreen />
-      <TriangleOrange />
-      <TriangleYellow />
-      <TriangleBrown />
-      <TriangleBigGray />
-      <TriangleSmallGray />
-      <TriangleGray />
+      <SignupBackground />
     </SignupWrapper>
   );
 };
