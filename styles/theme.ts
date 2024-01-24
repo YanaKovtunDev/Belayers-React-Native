@@ -17,7 +17,9 @@ export const theme = extendTheme({
     secondary: '#A0BEAB',
     text: '#211623',
     white: '#FFF',
-    gray: '#A9AEBF',
+    grayText: '#A9AEBF',
+    border: '#E5E6F0',
+    darkGrey: '#939396',
     facebook: { main: '#2D4FA6', hover: '#122e73' },
   },
 });

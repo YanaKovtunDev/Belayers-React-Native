@@ -7,6 +7,9 @@ export type RootStackParamList = {
   PrivacyPolicy: undefined;
   Main: undefined;
   Onboarding: undefined;
+  PhoneNumber: undefined;
+  OtpVerify: { phoneNumber: string };
+  Email: undefined;
 };
 
 export type RootStackScreenProps<T extends keyof RootStackParamList> = StackScreenProps<

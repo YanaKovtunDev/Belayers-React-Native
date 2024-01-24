@@ -12,7 +12,7 @@ export const logo = {
   letterSpacing: 1.6,
 };
 
-export const header = {
+export const mainHeader = {
   ...text,
   letterSpacing: 1.2,
   fontSize: 24,
@@ -41,15 +41,26 @@ export const buttonText = {
   textTransform: 'uppercase' as 'uppercase',
 };
 
-export const navigationHeader = {
+export const header = {
   ...text,
   fontSize: 16,
-  fontFamily: 'UnboundedBold',
+  fontFamily: 'UnboundedSemiBold',
   letterSpacing: 0.8,
+};
+
+export const navigationHeader = {
+  ...header,
+  fontFamily: 'UnboundedBold',
 };
 
 export const link = {
   ...text,
   color: theme.colors.primary[600],
+  fontFamily: 'UnboundedLight',
+};
+
+export const secondaryLink = {
+  ...text,
+  color: theme.colors.secondary,
   fontFamily: 'UnboundedLight',
 };

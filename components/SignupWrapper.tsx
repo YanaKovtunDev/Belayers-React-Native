@@ -3,7 +3,7 @@ import React, { FC } from 'react';
 import { Typography } from '../styles';
 import { HStack, VStack } from 'native-base';
 import { theme } from '../styles/theme';
-import { TriangleGreen } from '../assets/svg/SignupTriangles';
+import { SignupBackground } from '../assets/svg/SignupTriangles';
 
 interface SignupWrapper {
   children: React.ReactNode;
@@ -19,7 +19,7 @@ export const SignupWrapper: FC<SignupWrapper> = ({ children }) => (
       />
       <Text style={[Typography.logo]}>Belayers</Text>
     </HStack>
-    <TriangleGreen />
+    <SignupBackground />
     {children}
   </VStack>
 );
