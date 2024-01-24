@@ -15,6 +15,10 @@ import { PrivacyPolicy } from './screens/PrivacyPolicy';
 import { RootStackParamList } from './types/navigation';
 import { FIREBASE_AUTH } from './FirebaseConfig';
 import ProfileLayout from './components/ProfileLayout';
+import { PhoneNumber } from './screens/authorization/PhoneNumber';
+import { OtpVerify } from './screens/authorization/OtpVerify';
+import { Email } from './screens/authorization/Email';
+import { UserProvider } from './context/UserAuthContext';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 export default function App() {
@@ -40,57 +44,55 @@ export default function App() {
   }, []);
 
   return (
-    <NativeBaseProvider theme={theme}>
-      {!fontsLoaded ? (
-        <Box>
-          <ActivityIndicator size="large" color="black" />
-        </Box>
-      ) : isSplashScreenVisible ? (
-        <SplashScreen />
-      ) : (
-        <NavigationContainer>
-          <Stack.Navigator initialRouteName="SignUp">
-            <Stack.Group
-              screenOptions={{
-                headerTitleStyle: Typography.navigationHeader,
-                headerTitleAlign: 'center',
-                headerTintColor: theme.colors.gray,
-                headerShadowVisible: false,
-              }}
-            >
-              {user ? (
-                <Stack.Screen
-                  name="InsideProfile"
-                  component={ProfileLayout}
-                  options={{ headerShown: false }}
-                />
-              ) : (
-                <>
-                  <Stack.Screen
-                    name="Onboarding"
-                    component={Onboarding}
-                    options={{ headerShown: false }}
-                  />
-                  <Stack.Screen
-                    name="TermsAndCondition"
-                    component={TermsAndConditions}
-                    options={{
-                      title: 'Terms & Conditions',
-                    }}
-                  />
-                  <Stack.Screen
-                    name="PrivacyPolicy"
-                    component={PrivacyPolicy}
-                    options={{
-                      title: 'Privacy Policy',
-                    }}
-                  />
-                </>
-              )}
-            </Stack.Group>
-          </Stack.Navigator>
-        </NavigationContainer>
-      )}
-    </NativeBaseProvider>
+    <UserProvider>
+      <NativeBaseProvider theme={theme}>
+        {!fontsLoaded ? (
+          <Box>
+            <ActivityIndicator size="large" color="black" />
+          </Box>
+        ) : isSplashScreenVisible ? (
+          <SplashScreen />
+        ) : (
+          <NavigationContainer>
+            <Stack.Navigator initialRouteName="SignUp">
+              <Stack.Group
+                screenOptions={{
+                  headerTitleStyle: Typography.navigationHeader,
+                  headerTitleAlign: 'center',
+                  headerTintColor: theme.colors.grayText,
+                  headerShadowVisible: false,
+                  headerShown: false,
+                }}
+              >
+                {user ? (
+                  <Stack.Screen name="InsideProfile" component={ProfileLayout} />
+                ) : (
+                  <>
+                    <Stack.Screen name="Onboarding" component={Onboarding} />
+                    <Stack.Screen name="PhoneNumber" component={PhoneNumber} />
+                    <Stack.Screen name="OtpVerify" component={OtpVerify} />
+                    <Stack.Screen name="Email" component={Email} />
+                    <Stack.Screen
+                      name="TermsAndCondition"
+                      component={TermsAndConditions}
+                      options={{
+                        title: 'Terms & Conditions',
+                      }}
+                    />
+                    <Stack.Screen
+                      name="PrivacyPolicy"
+                      component={PrivacyPolicy}
+                      options={{
+                        title: 'Privacy Policy',
+                      }}
+                    />
+                  </>
+                )}
+              </Stack.Group>
+            </Stack.Navigator>
+          </NavigationContainer>
+        )}
+      </NativeBaseProvider>
+    </UserProvider>
   );
 }

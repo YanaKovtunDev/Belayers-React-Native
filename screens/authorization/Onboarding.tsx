@@ -7,14 +7,16 @@ import { theme } from '../../styles/theme';
 import { RootStackScreenProps } from '../../types/navigation';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { FirstMountain } from '../../assets/svg/SignupMountains';
-import { SignupBackground } from '../../assets/svg/SignupTriangles';
 import { signInWithCredential, FacebookAuthProvider } from 'firebase/auth';
 import { FIREBASE_AUTH } from '../../FirebaseConfig';
 import { LoginManager, AccessToken } from 'react-native-fbsdk-next';
-import { saveUserDataToFirestore } from '../../utils/firebase';
+import { getUserDataFromDB, saveUserDataToFirestore } from '../../utils/firebase';
+import { useUser } from '../../context/UserAuthContext';
+import { User } from '../../types/user';
 
 export const Onboarding = ({ navigation }: RootStackScreenProps<'Onboarding'>) => {
   const [onPressedFacebook, toggleOnPressedFacebook] = useState(false);
+  const { updateUser } = useUser();
 
   const signInWithFB = async () => {
     try {
@@ -26,14 +28,28 @@ export const Onboarding = ({ navigation }: RootStackScreenProps<'Onboarding'>) =
       const facebookCredential = FacebookAuthProvider.credential(data.accessToken);
       const response = await signInWithCredential(FIREBASE_AUTH, facebookCredential);
 
-      const userData = {
-        name: response.user.displayName || '',
-        email: response.user.email || '',
-        profilePicture: response.user.photoURL || '',
-      };
+      const phoneNumber = response.user.phoneNumber;
+      const email = response.user.email;
 
-      await saveUserDataToFirestore(userData);
-      Alert.alert('Authorization successful');
+      const user = phoneNumber
+        ? await getUserDataFromDB(phoneNumber, 'phoneNumber')
+        : email
+          ? await getUserDataFromDB(email, 'email')
+          : null;
+
+      if (!user) {
+        const userData = {
+          name: response.user.displayName || '',
+          email: response.user.email || '',
+          profilePicture: response.user.photoURL || '',
+          phoneNumber: response.user.phoneNumber || '',
+        };
+        await saveUserDataToFirestore(userData);
+        updateUser(userData);
+        Alert.alert('Authorization successful');
+      } else {
+        updateUser(user as User);
+      }
     } catch (e) {
       const message = (e as Error).message;
       Alert.alert(message || 'Error with authorization');
@@ -42,9 +58,13 @@ export const Onboarding = ({ navigation }: RootStackScreenProps<'Onboarding'>) =
 
   return (
     <SignupWrapper>
-      <Text style={[Typography.header, { marginBottom: 45 }]}>Join us</Text>
+      <Text style={[Typography.mainHeader, { marginBottom: 45 }]}>Join us</Text>
       <VStack>
-        <Button colorScheme="primary" style={[styles.buttonPrimary]}>
+        <Button
+          colorScheme="primary"
+          style={[styles.buttonPrimary]}
+          onPress={() => navigation.navigate('PhoneNumber')}
+        >
           <Text style={Typography.buttonText}>use mobile phone</Text>
         </Button>
         <Text style={[Typography.small, { marginVertical: 20, textAlign: 'center' }]}>
@@ -78,7 +98,6 @@ export const Onboarding = ({ navigation }: RootStackScreenProps<'Onboarding'>) =
         </Text>
       </VStack>
       <FirstMountain />
-      <SignupBackground />
     </SignupWrapper>
   );
 };
