@@ -2,9 +2,19 @@
   "expo": {
     "name": "Belayers-React-Native",
     "slug": "Belayers-React-Native",
+    "plugins": [
+      [
+        "react-native-fbsdk-next",
+        {
+          "appID": "2029518404091304",
+          "clientToken": "d8f7436c5dd33ba97927fbfc74dbf6a8",
+          "displayName": "Belayers"
+        }
+      ]
+    ],
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/logoIcon.png",
     "userInterfaceStyle": "light",
     "assetBundlePatterns": [
       "**/*"
@@ -14,12 +24,17 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.yanakovtundev.BelayersReactNative"
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/logoIcon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "2b2798f7-2b19-49bf-a5ad-6ceee94f8d73"
+      }
     }
   }
 }
