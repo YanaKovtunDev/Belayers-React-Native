@@ -11,12 +11,13 @@ import { signInWithCredential, FacebookAuthProvider } from 'firebase/auth';
 import { FIREBASE_AUTH } from '../../FirebaseConfig';
 import { LoginManager, AccessToken } from 'react-native-fbsdk-next';
 import { getUserDataFromDB, saveUserDataToFirestore } from '../../utils/firebase';
-import { useUser } from '../../context/UserAuthContext';
 import { User } from '../../types/user';
+import { useAppDispatch } from '../../app/store';
+import { updateUser } from '../../features/auth/authSlice';
 
 export const Onboarding = ({ navigation }: RootStackScreenProps<'Onboarding'>) => {
   const [onPressedFacebook, toggleOnPressedFacebook] = useState(false);
-  const { updateUser } = useUser();
+  const dispatch = useAppDispatch();
 
   const signInWithFB = async () => {
     try {
@@ -45,10 +46,10 @@ export const Onboarding = ({ navigation }: RootStackScreenProps<'Onboarding'>) =
           phoneNumber: response.user.phoneNumber || '',
         };
         await saveUserDataToFirestore(userData);
-        updateUser(userData);
+        dispatch(updateUser(userData));
         Alert.alert('Authorization successful');
       } else {
-        updateUser(user as User);
+        dispatch(updateUser(user as User));
       }
     } catch (e) {
       const message = (e as Error).message;

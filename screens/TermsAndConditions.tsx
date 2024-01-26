@@ -3,34 +3,13 @@ import { Text } from 'react-native';
 import React from 'react';
 import { theme } from '../styles/theme';
 import { Typography } from '../styles';
+import { termsAndCondition } from '../data/userTerms';
 
-const terms = [
-  {
-    title: 'Title one',
-    text:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.\n' +
-      '\n' +
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.\n' +
-      '\n' +
-      'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
-  },
-  {
-    title: 'Title two',
-    text:
-      'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.\n' +
-      '\n' +
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\n' +
-      '\n' +
-      'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.\n' +
-      '\n' +
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-  },
-];
 export const TermsAndConditions = () => {
   return (
     <ScrollView>
       <VStack safeArea px={4} style={{ paddingTop: 20 }} bg={theme.colors.white} flex={1}>
-        {terms.map((term, key) => (
+        {termsAndCondition.map((term, key) => (
           <Box key={key} mb={6}>
             <Text style={[Typography.navigationHeader, { marginBottom: 15 }]}>
               {key + 1 + '. ' + term.title}

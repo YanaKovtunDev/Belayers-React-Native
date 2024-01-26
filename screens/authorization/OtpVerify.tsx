@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, Alert, Platform } from 'react-native';
-import { checkVerification, sendSmsVerification } from '../../api/verify';
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, Text, Alert, Platform, ActivityIndicator } from 'react-native';
 import OTPInputView from '@twotalltotems/react-native-otp-input';
 import { RootStackScreenProps } from '../../types/navigation';
 import { FIREBASE_AUTH } from '../../FirebaseConfig';
@@ -11,31 +10,39 @@ import { Buttons, Typography } from '../../styles';
 import { theme } from '../../styles/theme';
 import { Button } from 'native-base';
 import { OTPMountain } from '../../assets/svg/SignupMountains';
+import {
+  useSendSmsVerifyMutation,
+  useCheckVerificationMutation,
+} from '../../features/auth/verifyApi';
+import { handleApiErrors } from '../../utils/errors';
 
 export const OtpVerify = ({ route, navigation }: RootStackScreenProps<'OtpVerify'>) => {
   const { phoneNumber } = route.params;
-  const [invalidCode, setInvalidCode] = useState(false);
   const [code, setCode] = useState('');
-  const handleVerification = async (code: string) => {
-    try {
-      const isVerified = await checkVerification(phoneNumber, code);
 
-      if (isVerified) {
-        const user = await getUserDataFromDB(phoneNumber, 'phoneNumber');
-        if (user) {
-          await signInWithCredential(FIREBASE_AUTH, user.credential);
-          Alert.alert('Authorization successful');
-        } else {
-          navigation.replace('Email');
-        }
+  const [sendSmsVerify, response] = useSendSmsVerifyMutation();
+  const [checkVerification, { isSuccess, error, isLoading }] = useCheckVerificationMutation();
+
+  const handleVerification = async () => {
+    try {
+      const user = await getUserDataFromDB(phoneNumber, 'phoneNumber');
+      if (user) {
+        await signInWithCredential(FIREBASE_AUTH, user.credential);
+        Alert.alert('Authorization successful');
       } else {
-        setInvalidCode(true);
+        navigation.replace('Email');
       }
-    } catch (error) {
+    } catch (e) {
       const message = (error as Error).message;
-      Alert.alert(`${'Error with verification: ' + message} || "Error with verification" `);
+      Alert.alert(`${'Error with verification: ' + message || 'Error with verification'}`);
     }
   };
+
+  useEffect(() => {
+    if (isSuccess) {
+      handleVerification();
+    }
+  }, [isSuccess]);
 
   return (
     <SignupWrapper>
@@ -58,20 +65,33 @@ export const OtpVerify = ({ route, navigation }: RootStackScreenProps<'OtpVerify
         codeInputHighlightStyle={styles.codeStyleHighLighted}
         onCodeFilled={(code) => setCode(code)}
       />
-      {invalidCode && <Text style={styles.error}>Incorrect code</Text>}
-      <Text
-        onPress={() => sendSmsVerification(phoneNumber)}
-        style={[Typography.secondaryLink, { marginBottom: 35, marginTop: 25 }]}
-      >
-        Send me a new code
-      </Text>
-      <Button
-        colorScheme="primary"
-        style={[code ? styles.buttonPrimary : Buttons.disabled]}
-        onPress={() => handleVerification(code)}
-      >
-        <Text style={Typography.buttonText}>next</Text>
-      </Button>
+      {error && <Text style={[Typography.error, { marginTop: 10 }]}>{handleApiErrors(error)}</Text>}
+      {response.isLoading ? (
+        <ActivityIndicator
+          size="large"
+          color="#A0BEAB"
+          style={{ marginBottom: 35, marginTop: 25 }}
+        />
+      ) : (
+        <Text
+          onPress={() => sendSmsVerify(phoneNumber)}
+          style={[Typography.secondaryLink, { marginBottom: 35, marginTop: 25 }]}
+        >
+          Send me a new code
+        </Text>
+      )}
+
+      {isLoading ? (
+        <ActivityIndicator size="large" color="#D95721" />
+      ) : (
+        <Button
+          colorScheme="primary"
+          style={[code ? styles.buttonPrimary : Buttons.disabled]}
+          onPress={() => checkVerification({ phoneNumber, code })}
+        >
+          <Text style={Typography.buttonText}>next</Text>
+        </Button>
+      )}
       <OTPMountain />
     </SignupWrapper>
   );
@@ -94,8 +114,5 @@ const styles = StyleSheet.create({
   },
   codeStyleHighLighted: {
     borderColor: theme.colors.darkGrey,
-  },
-  error: {
-    color: 'red',
   },
 });

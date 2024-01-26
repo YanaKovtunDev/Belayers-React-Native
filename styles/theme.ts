@@ -21,5 +21,6 @@ export const theme = extendTheme({
     border: '#E5E6F0',
     darkGrey: '#939396',
     facebook: { main: '#2D4FA6', hover: '#122e73' },
+    error: '#e0291f',
   },
 });

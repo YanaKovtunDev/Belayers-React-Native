@@ -64,3 +64,8 @@ export const secondaryLink = {
   color: theme.colors.secondary,
   fontFamily: 'UnboundedLight',
 };
+
+export const error = {
+  ...text,
+  color: theme.colors.error,
+};

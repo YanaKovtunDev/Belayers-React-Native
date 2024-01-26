@@ -18,7 +18,8 @@ import ProfileLayout from './components/ProfileLayout';
 import { PhoneNumber } from './screens/authorization/PhoneNumber';
 import { OtpVerify } from './screens/authorization/OtpVerify';
 import { Email } from './screens/authorization/Email';
-import { UserProvider } from './context/UserAuthContext';
+import { Provider } from 'react-redux';
+import { store } from './app/store';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 export default function App() {
@@ -44,7 +45,7 @@ export default function App() {
   }, []);
 
   return (
-    <UserProvider>
+    <Provider store={store}>
       <NativeBaseProvider theme={theme}>
         {!fontsLoaded ? (
           <Box>
@@ -93,6 +94,6 @@ export default function App() {
           </NavigationContainer>
         )}
       </NativeBaseProvider>
-    </UserProvider>
+    </Provider>
   );
 }
