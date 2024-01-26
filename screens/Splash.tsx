@@ -1,39 +1,36 @@
-import { Image, SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import { Text } from 'react-native';
 import React from 'react';
 
-import { Typography, Container } from '../styles';
-import { TriangleBrown } from '../assets/icons/TriangleBrown';
-import { TriangleYellow } from '../assets/icons/TriangleYellow';
-import { TriangleGreen } from '../assets/icons/TriangleGreen';
-import { TriangleOrange } from '../assets/icons/TriangleOrange';
+import { Typography } from '../styles';
+import { TriangleBrown } from '../assets/svg/SplashTriangles';
+import { TriangleYellow } from '../assets/svg/SplashTriangles';
+import { TriangleGreen } from '../assets/svg/SplashTriangles';
+import { TriangleOrange } from '../assets/svg/SplashTriangles';
+import { Box, VStack, Image } from 'native-base';
 
 export const SplashScreen = () => {
   return (
-    <SafeAreaView style={[Container.screenContainer, styles.container]}>
+    <Box flex={1} px={3} bg="white" alignItems="center" justifyContent="center" safeArea>
       <TriangleBrown />
       <TriangleYellow />
-      <View style={styles.container}>
-        <Image source={require('../assets/logo.png')} style={{ marginBottom: 50 }} />
+      <VStack space={2} alignItems="center">
+        <Image
+          source={require('../assets/logo.png')}
+          style={{ marginBottom: 40 }}
+          alt="Logo Belayers"
+        />
         <Text
           style={{
-            ...Typography.small,
+            ...Typography.capsLock,
             marginBottom: 5,
           }}
         >
           Climbing it’s not only a sport or a passion
         </Text>
         <Text style={[Typography.header, { textAlign: 'center' }]}>Climbing is a lifestyle</Text>
-      </View>
+      </VStack>
       <TriangleGreen />
       <TriangleOrange />
-    </SafeAreaView>
+    </Box>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
